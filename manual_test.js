@@ -1,7 +1,9 @@
 const readline = require('readline');
 
 // Native fetch is available in Node 18+
-const BASE_URL = 'http://localhost:5000/api/auth';
+// Native fetch is available in Node 18+
+// const BASE_URL = 'http://localhost:5000/api/auth';
+const BASE_URL = 'https://shopsync-nu.vercel.app/api/auth';
 
 const rl = readline.createInterface({
     input: process.stdin,
