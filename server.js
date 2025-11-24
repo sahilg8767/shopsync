@@ -25,6 +25,36 @@ app.get('/', (req, res) => {
   res.send('ShopSync Backend is running');
 });
 
+app.get('/api/debug-db', async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    const state = mongoose.connection.readyState;
+    const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+
+    // Try a simple operation
+    const User = require('./src/models/User');
+    const count = await User.countDocuments();
+
+    res.json({
+      message: 'DB Connection Test',
+      state: states[state] || state,
+      userCount: count,
+      env: {
+        mongo_defined: !!process.env.MONGO_URI
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'DB Test Failed',
+      error: error.message,
+      stack: error.stack,
+      env: {
+        mongo_defined: !!process.env.MONGO_URI
+      }
+    });
+  }
+});
+
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
